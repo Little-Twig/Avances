@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 9148501652892183337}
   - component: {fileID: 4141684195747209892}
   - component: {fileID: 1565099594471008010}
-  - component: {fileID: 2617644985581935169}
   m_Layer: 0
   m_Name: MC
   m_TagString: Untagged
@@ -83,6 +82,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 9148501652892183337}
+  healthbar: {fileID: 0}
   attackPoint: {fileID: 0}
   enemyLayers:
     serializedVersion: 2
@@ -90,6 +90,10 @@ MonoBehaviour:
   moveSpeed: 0
   walkSpeed: 3
   runSpeed: 4
+  maxHealth: 3
+  currentHealth: 0
+  attackDmg: 1
+  attackRate: 2
   isGrounded: 0
   groundCheckDistance: 0.2
   groundMask:
@@ -109,18 +113,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.5511986, y: 1.3029969, z: 0.7693094}
   m_Center: {x: -0.017974198, y: 0.7821636, z: 0.029643908}
---- !u!114 &2617644985581935169
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3866745756376232952}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5600a38cfb7626945965bd573285a70c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &7505602252895996190
 GameObject:
   m_ObjectHideFlags: 0
