@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using System;
+using UnityEngine.Events;
 
 
 public class MainCharController : MonoBehaviour
@@ -34,6 +37,10 @@ public class MainCharController : MonoBehaviour
     private float smoothTurnTime = 0.1f;
     private float smoothTurnVelocity;
 
+    //EVENTS
+    public static event Action onDeath;
+    [SerializeField] private UnityEvent onDeathUnity; 
+
 
 
     void Start()
@@ -46,16 +53,29 @@ public class MainCharController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Move();
-        if(Time.time >= attackCD)
+        Velocity.y += gravity * Time.deltaTime;
+        controller.Move(Velocity * Time.deltaTime);
+
+        if (currentHealth > 0)
         {
-            if (Input.GetKeyDown(KeyCode.Mouse0))
+            Move();
+            if (Time.time >= attackCD)
             {
-                AnimAttack();
-                Attack();
-                attackCD = Time.time + 1f / attackRate;
+                if (Input.GetKeyDown(KeyCode.Mouse0))
+                {
+                    AnimAttack();
+                    Attack();
+                    attackCD = Time.time + 1f / attackRate;
+                }
             }
+            
         }
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+       
+        
         
     }
 
@@ -63,7 +83,7 @@ public class MainCharController : MonoBehaviour
     {
         isGrounded = Physics.CheckSphere(transform.position, groundCheckDistance, groundMask);
 
-        if(isGrounded && Velocity.y < 0)
+        if (isGrounded && Velocity.y < 0)
         {
             Velocity.y = -2f;
         }
@@ -72,24 +92,21 @@ public class MainCharController : MonoBehaviour
         float vertical = Input.GetAxisRaw("Vertical");
         Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
 
-        if(direction != Vector3.zero && !Input.GetKey(KeyCode.LeftShift))
-        {
-            Walk();
-        }
-        if (direction != Vector3.zero && Input.GetKey(KeyCode.LeftShift))
-        {
-            Run();
-        }
-        if(direction==Vector3.zero)
-        {
-            Idle();
-        }
-        if (currentHealth <= 0)
-        {
-            Die();
-            Debug.Log("Muerto");
-
-        }
+        
+            if (direction != Vector3.zero && !Input.GetKey(KeyCode.LeftShift))
+            {
+                Walk();
+            }
+            if (direction != Vector3.zero && Input.GetKey(KeyCode.LeftShift))
+            {
+                Run();
+            }
+            if (direction == Vector3.zero)
+            {
+                Idle();
+            }
+        
+        
 
         direction *= moveSpeed;
         controller.Move(direction * Time.deltaTime);
@@ -104,12 +121,11 @@ public class MainCharController : MonoBehaviour
 
         
 
-        Velocity.y += gravity * Time.deltaTime;
-        controller.Move(Velocity * Time.deltaTime);
+       
     }
     private void Idle()
     {
-        anim.SetFloat("Speed", 0);
+        anim.SetFloat("Speed", 0.1f);
     }
     private void Walk()
     {
@@ -159,6 +175,7 @@ public class MainCharController : MonoBehaviour
             
             
         }
+    
         
     }
 
@@ -166,9 +183,9 @@ public class MainCharController : MonoBehaviour
     {
 
         anim.SetBool("isDead", true);
-
-
-        
+        onDeath?.Invoke();
+        onDeathUnity?.Invoke();
+        Debug.Log("Player has died");
 
     }
 }

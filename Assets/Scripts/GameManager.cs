@@ -6,7 +6,10 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    private MainCharController playerScript;
+
     private int playerLevel;
+    
     // Start is called before the first frame update
     private void Awake()
     {
@@ -23,13 +26,19 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        
+        MainCharController.onDeath += GameOver;
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+    private void GameOver()
+    {
+        instance.playerLevel = 1;
+        Debug.Log("Game Over");
+        Debug.Log("MainCharController activó la función GameOver en GameManager");
     }
     public void AddExp()
     {

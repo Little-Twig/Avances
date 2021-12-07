@@ -48,7 +48,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6713426637555809783
 Transform:
   m_ObjectHideFlags: 0
@@ -111,12 +111,18 @@ MonoBehaviour:
   attackRate: 2
   player: {fileID: 3866745756376232952, guid: 9ef4f84a27f56d84ea935f58c36b201e, type: 3}
   maxHealth: 5
+  currentHealth: 0
   attackDmg: 1
   attackPoint: {fileID: 4076027147953029521}
   attackRange: 0.5
+  dmgRange: 0.5
   playerLayers:
     serializedVersion: 2
     m_Bits: 0
+  difficulty: 0
+  onHitUnity:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &7083919649774831114
 PrefabInstance:
   m_ObjectHideFlags: 0

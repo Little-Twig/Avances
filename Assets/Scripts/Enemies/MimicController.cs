@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class MimicController : MonoBehaviour
 {
@@ -26,12 +27,14 @@ public class MimicController : MonoBehaviour
     private enum Difficulty { Easy, Medium, Hard };
     private bool Active = false;
     private bool isDead = false;
-    private bool isAttack = false;
+
+    [SerializeField] private UnityEvent onHitUnity;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        
         switch (difficulty)
         {
             case Difficulty.Easy:
@@ -72,24 +75,13 @@ public class MimicController : MonoBehaviour
         
         
             
-        Vector3 playerDirection = GetPlayerDirection();
+       
         if (timer<0 && isDead == false)
         {
             Active = true;
 
+            move();
 
-            if (playerDirection.magnitude > attackRange)
-            {
-                rbEnemy.rotation = Quaternion.LookRotation(new Vector3(playerDirection.x, 0, playerDirection.z));
-                rbEnemy.AddForce(playerDirection.normalized * speedEnemy, ForceMode.Impulse);
-            }
-
-            if (Time.time >= attackCD && playerDirection.magnitude < attackRange)
-            {
-                AnimAttack();
-                Attack();
-                attackCD = Time.time + 1f / attackRate;
-            }
         }
         
         timer -= Time.deltaTime;
@@ -105,6 +97,24 @@ public class MimicController : MonoBehaviour
             
         }
 
+
+    }
+    private void move()
+    {
+        Vector3 playerDirection = GetPlayerDirection();
+
+        if (playerDirection.magnitude > attackRange)
+        {
+            rbEnemy.rotation = Quaternion.LookRotation(new Vector3(playerDirection.x, 0, playerDirection.z));
+            rbEnemy.AddForce(playerDirection.normalized * speedEnemy, ForceMode.Impulse);
+        }
+
+        if (Time.time >= attackCD && playerDirection.magnitude < attackRange)
+        {
+            AnimAttack();
+            Attack();
+            attackCD = Time.time + 1f / attackRate;
+        }
 
     }
     private Vector3 GetPlayerDirection()
@@ -166,5 +176,10 @@ public class MimicController : MonoBehaviour
             return;
         }
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+    }
+    public void VictoryMessage()
+    {
+        Debug.Log("Your treasure is mine!");
+        Debug.Log("MimicController a sido activado a traves de onDeathUnity por MainCharController");
     }
 }
